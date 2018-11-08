@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -15,47 +16,57 @@ public class AhorcadoServlet extends HttpServlet {
     public AhorcadoServlet() {
         super();
     }
-    String arrayPalabras[] = {"teléfono", "procesador", "teclado", "ratón", "monitor"};
-    int pos_array = (int)(Math.random()*5);
-    String palabra_aleatoria = arrayPalabras[pos_array];
-
+    
+    String arrayPalabras[] = {"teléfono"/*, "procesador", "teclado", "ratón", "monitor"*/};
+    //int pos_array = (int)(Math.random()*5);
+    
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
 	    HttpSession sesion = request.getSession(false);
 	    
-	    String arrayPalabras[] = {"teléfono", "procesador", "teclado", "ratón", "monitor"};
-	    int pos_array = (int)(Math.random()*5);
-	    String palabra_aleatoria = arrayPalabras[pos_array];
-	    
 	    String palabra_oculta = "";
+	    char letra = '\0';
+	    String palabra_aleatoria = arrayPalabras[0];
 	    
-	    int letra_oculta;
-	    
+	    for(int i = 0; i < palabra_aleatoria.length(); i++) {
+	    	palabra_oculta += "-";
+	    }
 	    if(sesion != null ) {
-	    	if(sesion.getAttribute("palabra_aleatoria") != null) {
-	    		palabra_aleatoria = (String) sesion.getAttribute("palabra_aleatoria");
-	    	}
-	    	if(sesion.getAttribute("palabra_oculta") != null) {
-	    		palabra_oculta = (String) sesion.getAttribute("palabra_oculta");
-	    	} else {
-	    		for(int i = 0; i < palabra_aleatoria.length(); i++) {
-					letra_oculta = (int)(Math.random()*2);
-					if(letra_oculta == 1) {
-						palabra_oculta += "-";
-					} else {
-						palabra_oculta += palabra_aleatoria.charAt(i);
-					}
-				}
-	    	}
+	    	if (request.getParameter("empezar") != null) {  // se ha recibido el parámetro empezar
+				sesion.invalidate();  // se inactiva la sesión
+			} else {
+		    	if(sesion.getAttribute("palabra_aleatoria") != null) {
+		    		palabra_aleatoria = (String) sesion.getAttribute("palabra_aleatoria");
+		    	}
+		    	if(sesion.getAttribute("palabra_oculta") != null) {
+		    		palabra_oculta = (String) sesion.getAttribute("palabra_oculta");
+		    	}
+			}
 		}
-	    
+	    request.setAttribute("letra", letra);
+	    request.setAttribute("palabra_oculta", palabra_oculta);
 		request.setAttribute("palabra_aleatoria", palabra_aleatoria);
-		request.setAttribute("palabra_oculta", palabra_oculta);
 		
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ahorcado.jsp");
-		dispatcher.forward(request, response);
+		dispatcher.include(request, response);
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
+		String letra_cadena = request.getParameter("letra");
+		char letra = letra_cadena.charAt(0);
+		String palabra_aleatoria = request.getParameter("palabra_aleatoria");
+		String palabra_oculta = request.getParameter("palabra_oculta");
+		
+		for(int i = 0; i < palabra_aleatoria.length(); i++) {
+	    	if(letra == palabra_aleatoria.charAt(i)) {
+	    		request.setAttribute("letra_correcta", "<font color='green'>Letra correcta!!</font>");
+	    	}
+	    }
+		
+		request.setAttribute("palabra_oculta", palabra_oculta);
+		request.setAttribute("palabra_aleatoria", palabra_aleatoria);
+		request.setAttribute("letra", letra);
+		
+		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ahorcado.jsp");
+		dispatcher.include(request, response);
 	}
 }
