@@ -25,6 +25,9 @@ public class AhorcadoServlet extends HttpServlet {
 	    String palabra_oculta = "";
 	    char letra = '\0';
 	    String palabra_aleatoria = arrayPalabras[pos_array];
+	    int intentos = 6;
+	    int errores = 0;
+	    String letras_probadas = "";
 	    
 	    //"palabra_oculta" es un String del mismo tamaño que "palabra_aleatoria" pero formado con "-"
 	    for(int i = 0; i < palabra_aleatoria.length(); i++) {
@@ -37,9 +40,12 @@ public class AhorcadoServlet extends HttpServlet {
 				pos_array = (int)(Math.random()*5);
 				palabra_aleatoria = arrayPalabras[pos_array];
 				//Se vuelve a formar "palabra_oculta" ya que la longitud de la nueva "palabra_aleatoria" puede ser diferente a la primera
+				palabra_oculta = "";
 				for(int i = 0; i < palabra_aleatoria.length(); i++) {
 			    	palabra_oculta += "-";
 			    }
+				intentos = 6;
+			    errores = 0;
 	    	}
 	    	if (request.getParameter("empezar") != null) {  // se ha recibido el parámetro empezar
 				sesion.invalidate();  // se inactiva la sesión
@@ -50,12 +56,24 @@ public class AhorcadoServlet extends HttpServlet {
 		    	if(sesion.getAttribute("palabra_oculta") != null) {
 		    		palabra_oculta = (String) sesion.getAttribute("palabra_oculta");
 		    	}
+		    	if(sesion.getAttribute("intentos") != null) {
+		    		intentos = (int) sesion.getAttribute("intentos");
+		    	}
+		    	if(sesion.getAttribute("errores") != null) {
+		    		errores = (int) sesion.getAttribute("errores");
+		    	}
+		    	if(sesion.getAttribute("letras_probadas") != null) {
+		    		errores = (int) sesion.getAttribute("letras_probadas");
+		    	}
 			}
 		}
 	    //Despues de las comprobaciones de la sesion se pasan los atributos al JSP
 	    request.setAttribute("letra", letra);
 	    request.setAttribute("palabra_oculta", palabra_oculta);
 		request.setAttribute("palabra_aleatoria", palabra_aleatoria);
+		request.setAttribute("intentos", intentos);
+		request.setAttribute("errores", errores);
+		request.setAttribute("letras_probadas", letras_probadas);
 		
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ahorcado.jsp");
 		dispatcher.include(request, response);
@@ -65,10 +83,13 @@ public class AhorcadoServlet extends HttpServlet {
 		String palabra_aleatoria = request.getParameter("palabra_aleatoria");
 		String letra_cadena = request.getParameter("letra");
 		String palabra_oculta = request.getParameter("palabra_oculta");
+		String intentos = request.getParameter("intentos");
+		String errores = request.getParameter("errores");
+		String letras_probadas = request.getParameter("letras_probadas");
 		char letra = '\0';
 		boolean devuelve_letra = false; //Es false cuando el valor de "letra" no coincide con ninguno de los caracteres de "palabra_aleatoria"
 		
-		if(letra_cadena != "") {
+		if(letra_cadena != "") {//Si se ha introducido algun caracter
 			letra = letra_cadena.charAt(0);
 			request.setAttribute("letra", letra);
 			for(int i = 0; i < palabra_aleatoria.length(); i++) {

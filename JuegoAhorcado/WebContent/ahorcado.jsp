@@ -4,6 +4,9 @@
     String palabra_aleatoria = (String) request.getAttribute("palabra_aleatoria");
     String palabra_oculta = (String) request.getAttribute("palabra_oculta");
     String mensaje_victoria = (String) request.getAttribute("mensaje_victoria");
+    String letras_probadas = (String) request.getAttribute("letras_probadas");
+    int intentos = (int) request.getAttribute("intentos");
+    int errores = (int) request.getAttribute("errores");
     String reinicar = (String) request.getAttribute("reiniciar");
     if(reinicar == null) {
     	reinicar = "";
@@ -62,6 +65,8 @@
 	<form action="AhorcadoServlet" method="post">
 		Introduce una letra: <input type="text" name="letra" size="1" maxLength="1"/> 
 		<input type="submit" value="Prueba letra"/><br>
+		Intentos: <%=intentos %><br>
+		Errores: <%=errores %><br>
 		<a href="AhorcadoServlet?empezar">Cerrar ventana</a><br>
 		<%=mensaje_letra %>
 		<font color='red'><%=no_hay_letra %></font>
@@ -69,6 +74,9 @@
 		<%=reinicar %>
 		<input type="hidden" name="palabra_oculta" value="<%=palabra_oculta %>"/>
 		<input type="hidden" name="palabra_aleatoria" value="<%=palabra_aleatoria %>"/>
+		<input type="hidden" name="intentos" value="<%=intentos %>"/>
+		<input type="hidden" name="errores" value="<%=errores %>"/>
+		<input type="hidden" name="letras_probadas" value="<%=letras_probadas %>"/>
 	</form>
 </body>
 </html>
