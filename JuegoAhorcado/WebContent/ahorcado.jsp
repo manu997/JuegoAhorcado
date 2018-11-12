@@ -4,6 +4,10 @@
     String palabra_aleatoria = (String) request.getAttribute("palabra_aleatoria");
     String palabra_oculta = (String) request.getAttribute("palabra_oculta");
     String mensaje_victoria = (String) request.getAttribute("mensaje_victoria");
+    String reinicar = (String) request.getAttribute("reiniciar");
+    if(reinicar == null) {
+    	reinicar = "";
+    }
     if(mensaje_victoria == null) {
     	mensaje_victoria = "";
     }
@@ -60,10 +64,11 @@
 		<input type="submit" value="Prueba letra"/><br>
 		<a href="AhorcadoServlet?empezar">Cerrar ventana</a><br>
 		<%=mensaje_letra %>
-		<%=mensaje_victoria %>
 		<font color='red'><%=no_hay_letra %></font>
-		<input type="hidden" name="palabra_aleatoria" value="<%=palabra_aleatoria %>"/>
+		<%=mensaje_victoria %><br>
+		<%=reinicar %>
 		<input type="hidden" name="palabra_oculta" value="<%=palabra_oculta %>"/>
+		<input type="hidden" name="palabra_aleatoria" value="<%=palabra_aleatoria %>"/>
 	</form>
 </body>
 </html>
