@@ -25,8 +25,8 @@ public class AhorcadoServlet extends HttpServlet {
 	    String palabra_oculta = "";
 	    char letra = '\0';
 	    String palabra_aleatoria = arrayPalabras[pos_array];
-	    int intentos = 6;
-	    int errores = 0;
+	    String intentos = "6";
+	    String errores = "0";
 	    String letras_probadas = "";
 	    
 	    //"palabra_oculta" es un String del mismo tamaño que "palabra_aleatoria" pero formado con "-"
@@ -44,8 +44,8 @@ public class AhorcadoServlet extends HttpServlet {
 				for(int i = 0; i < palabra_aleatoria.length(); i++) {
 			    	palabra_oculta += "-";
 			    }
-				intentos = 6;
-			    errores = 0;
+				intentos = "6";
+			    errores = "0";
 	    	}
 	    	if (request.getParameter("empezar") != null) {  // se ha recibido el parámetro empezar
 				sesion.invalidate();  // se inactiva la sesión
@@ -57,13 +57,13 @@ public class AhorcadoServlet extends HttpServlet {
 		    		palabra_oculta = (String) sesion.getAttribute("palabra_oculta");
 		    	}
 		    	if(sesion.getAttribute("intentos") != null) {
-		    		intentos = (int) sesion.getAttribute("intentos");
+		    		intentos = (String) sesion.getAttribute("intentos");
 		    	}
 		    	if(sesion.getAttribute("errores") != null) {
-		    		errores = (int) sesion.getAttribute("errores");
+		    		errores = (String) sesion.getAttribute("errores");
 		    	}
 		    	if(sesion.getAttribute("letras_probadas") != null) {
-		    		errores = (int) sesion.getAttribute("letras_probadas");
+		    		errores = (String) sesion.getAttribute("letras_probadas");
 		    	}
 			}
 		}
@@ -83,8 +83,8 @@ public class AhorcadoServlet extends HttpServlet {
 		String palabra_aleatoria = request.getParameter("palabra_aleatoria");
 		String letra_cadena = request.getParameter("letra");
 		String palabra_oculta = request.getParameter("palabra_oculta");
-		String intentos = request.getParameter("intentos");
-		String errores = request.getParameter("errores");
+		String cadena_intentos = request.getParameter("intentos");
+		String cadena_errores = request.getParameter("errores");
 		String letras_probadas = request.getParameter("letras_probadas");
 		char letra = '\0';
 		boolean devuelve_letra = false; //Es false cuando el valor de "letra" no coincide con ninguno de los caracteres de "palabra_aleatoria"
@@ -94,7 +94,8 @@ public class AhorcadoServlet extends HttpServlet {
 			request.setAttribute("letra", letra);
 			for(int i = 0; i < palabra_aleatoria.length(); i++) {
 		    	if(letra == palabra_aleatoria.charAt(i)) {
-		    		char[] tempCharArray = palabra_oculta.toCharArray();//El String "palabra_oculta" se descompone en un array de char
+	    			letras_probadas += letra;
+	    			char[] tempCharArray = palabra_oculta.toCharArray();//El String "palabra_oculta" se descompone en un array de char
 		    		tempCharArray[i] = letra; // "i" es la posicion que se va a sustituir por el valor de "letra"
 		    		palabra_oculta = String.valueOf(tempCharArray);//Se vuelve a juntar el array de char para formar un String
 		    		devuelve_letra = true;
@@ -108,8 +109,24 @@ public class AhorcadoServlet extends HttpServlet {
 		    }
 			if(devuelve_letra == false) {
 				request.setAttribute("mensaje_letra", "<font color='red'>Letra incorrecta.</font>");
+				//Tratamos el numero de intentos
+				int intentos = Integer.parseInt(cadena_intentos);
+				intentos--;
+				cadena_intentos = Integer.toString(intentos);
+				//Tratamos el numero de errores
+				int errores = Integer.parseInt(cadena_errores);
+				errores++;
+				cadena_errores = Integer.toString(errores);
+				//Pasamos los atributos modificados de errores e intentos al JSP
+				if(cadena_intentos.equals("0")) {
+					request.setAttribute("mensaje_derrota", "<font color='red'><b>Has perdido.</b></font>");
+					request.setAttribute("reiniciar", "<a href='AhorcadoServlet?reiniciar'>Volver a jugar</a>");
+				}
 			}
 		}
+		request.setAttribute("letras_probadas", letras_probadas);
+		request.setAttribute("errores", cadena_errores);
+		request.setAttribute("intentos", cadena_intentos);
 		request.setAttribute("palabra_oculta", palabra_oculta);
 		request.setAttribute("palabra_aleatoria", palabra_aleatoria);
 		
