@@ -17,7 +17,7 @@ public class AhorcadoServlet extends HttpServlet {
         super();
     }
     
-    String arrayPalabras[] = {"teléfono"/*, "procesador", "teclado", "ratón", "monitor"*/};
+    String arrayPalabras[] = {"telefono"/*, "procesador", "teclado", "ratón", "monitor"*/};
     //int pos_array = (int)(Math.random()*5);
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
@@ -59,7 +59,6 @@ public class AhorcadoServlet extends HttpServlet {
 		
 		if(letra_cadena != "") {
 			letra = letra_cadena.charAt(0);
-			request.setAttribute("letra", letra);
 			for(int i = 0; i < palabra_aleatoria.length(); i++) {
 		    	if(letra == palabra_aleatoria.charAt(i)) {
 		    		devuelve_letra = true;
@@ -70,7 +69,7 @@ public class AhorcadoServlet extends HttpServlet {
 				request.setAttribute("mensaje_letra", "<font color='red'>Letra incorrecta.</font>");
 			}
 		}
-		
+		request.setAttribute("letra", letra);
 		request.setAttribute("palabra_oculta", palabra_oculta);
 		request.setAttribute("palabra_aleatoria", palabra_aleatoria);
 		

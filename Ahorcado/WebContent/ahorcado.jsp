@@ -17,6 +17,7 @@
     if(mensaje_letra == null) {
     	mensaje_letra = "";
     }
+    int j;
     %>
 <!DOCTYPE html>
 <html>
@@ -43,18 +44,10 @@
 	<table>
 		<tr>
 			<%
-			for(int i = 0; i < palabra_aleatoria.length(); i++) {
+			for(int i = 0; i < palabra_oculta.length(); i++) {
 				%><td>
 				<%
-				if(letra == palabra_aleatoria.charAt(i) && no_hay_letra == "") {
-				%>
-					<%=letra %>
-				<%
-				} else {
-				%>
-					<%="-" %>
-				<%
-				}
+				
 				%>
 				</td><%
 			}
