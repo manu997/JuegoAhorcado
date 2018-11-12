@@ -52,19 +52,27 @@ public class AhorcadoServlet extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 		String letra_cadena = request.getParameter("letra");
-		char letra = letra_cadena.charAt(0);
 		String palabra_aleatoria = request.getParameter("palabra_aleatoria");
 		String palabra_oculta = request.getParameter("palabra_oculta");
+		char letra = '\0';
+		boolean devuelve_letra = false; //Es false cuando la letra no coincide con ninguna de la palabra.
 		
-		for(int i = 0; i < palabra_aleatoria.length(); i++) {
-	    	if(letra == palabra_aleatoria.charAt(i)) {
-	    		request.setAttribute("letra_correcta", "<font color='green'>Letra correcta!!</font>");
-	    	}
-	    }
+		if(letra_cadena != "") {
+			letra = letra_cadena.charAt(0);
+			request.setAttribute("letra", letra);
+			for(int i = 0; i < palabra_aleatoria.length(); i++) {
+		    	if(letra == palabra_aleatoria.charAt(i)) {
+		    		devuelve_letra = true;
+		    		request.setAttribute("mensaje_letra", "<font color='green'>Letra correcta!!</font>");
+		    	}
+		    }
+			if(devuelve_letra == false) {
+				request.setAttribute("mensaje_letra", "<font color='red'>Letra incorrecta.</font>");
+			}
+		}
 		
 		request.setAttribute("palabra_oculta", palabra_oculta);
 		request.setAttribute("palabra_aleatoria", palabra_aleatoria);
-		request.setAttribute("letra", letra);
 		
 		RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/ahorcado.jsp");
 		dispatcher.include(request, response);

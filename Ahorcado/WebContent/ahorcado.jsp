@@ -3,13 +3,19 @@
     <%
     String palabra_aleatoria = (String) request.getAttribute("palabra_aleatoria");
     String palabra_oculta = (String) request.getAttribute("palabra_oculta");
-    char letra = (char) request.getAttribute("letra");
-    if(letra == '\0') {
-    	letra = '\0';
+    String no_hay_letra = "";
+    char letra = '\0';
+    try {
+    	letra = (char) request.getAttribute("letra");
+        if(letra == '\0') {
+        	letra = '\0';
+        }
+    } catch(NullPointerException e) {
+    	no_hay_letra = "No has introducido ninguna letra.";
     }
-    String letra_correcta = (String) request.getAttribute("letra_correcta");
-    if(letra_correcta == null) {
-    	letra_correcta = "";
+    String mensaje_letra = (String) request.getAttribute("mensaje_letra");
+    if(mensaje_letra == null) {
+    	mensaje_letra = "";
     }
     %>
 <!DOCTYPE html>
@@ -38,11 +44,19 @@
 		<tr>
 			<%
 			for(int i = 0; i < palabra_aleatoria.length(); i++) {
-				if(letra == palabra_aleatoria.charAt(i)) {
-					%><td><%=letra %></td><%
+				%><td>
+				<%
+				if(letra == palabra_aleatoria.charAt(i) && no_hay_letra == "") {
+				%>
+					<%=letra %>
+				<%
 				} else {
-					%><td>-</td><%
+				%>
+					<%="-" %>
+				<%
 				}
+				%>
+				</td><%
 			}
 			%>
 		</tr>
@@ -51,7 +65,8 @@
 		Introduce una letra: <input type="text" name="letra" size="1" maxLength="1"/> 
 		<input type="submit" value="Prueba letra"/><br>
 		<a href="AhorcadoServlet?empezar">Cerrar ventana</a><br>
-		<%=letra_correcta %>
+		<%=mensaje_letra %>
+		<%=no_hay_letra %>
 		<input type="hidden" name="palabra_aleatoria" value="<%=palabra_aleatoria %>"/>
 		<input type="hidden" name="palabra_oculta" value="<%=palabra_oculta %>"/>
 	</form>
