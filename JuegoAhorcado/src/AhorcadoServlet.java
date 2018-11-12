@@ -16,15 +16,15 @@ public class AhorcadoServlet extends HttpServlet {
         super();
     }
     
-    String arrayPalabras[] = {"telefono"/*, "procesador", "teclado", "ratón", "monitor"*/};
-    //int pos_array = (int)(Math.random()*5);
+    String arrayPalabras[] = {"telefono", "procesador", "teclado", "ratón", "monitor"};
+    int pos_array = (int)(Math.random()*5);
     
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException { 
 	    HttpSession sesion = request.getSession(false);
 	    
 	    String palabra_oculta = "";
 	    char letra = '\0';
-	    String palabra_aleatoria = arrayPalabras[0];
+	    String palabra_aleatoria = arrayPalabras[pos_array];
 	    
 	    for(int i = 0; i < palabra_aleatoria.length(); i++) {
 	    	palabra_oculta += "-";
