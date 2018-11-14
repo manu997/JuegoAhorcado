@@ -6,6 +6,7 @@
     String mensaje_victoria = (String) request.getAttribute("mensaje_victoria");
     String mensaje_derrota = (String) request.getAttribute("mensaje_derrota");
     String letras_probadas = (String) request.getAttribute("letras_probadas");
+    String letra_repetida = (String) request.getAttribute("letra_repetida");
     String intentos = (String) request.getAttribute("intentos");
     String errores = (String) request.getAttribute("errores");
     String reinicar = (String) request.getAttribute("reiniciar");
@@ -31,6 +32,9 @@
     String mensaje_letra = (String) request.getAttribute("mensaje_letra");
     if(mensaje_letra == null) {
     	mensaje_letra = "";
+    }
+    if(letra_repetida == null) {
+    	letra_repetida = "";
     }
     %>
 <!DOCTYPE html>
@@ -80,6 +84,7 @@
 				Introduce una letra: <input type="text" name="letra" size="1" maxLength="1"/> 
 				<input type="submit" value="Prueba letra"/><br>
 				<%=mensaje_letra %>
+				<%=letra_repetida %>
 				<font color='blue'><%=no_hay_letra %></font><br>
 				Ultima letra usada: <%=letra %><br>
 				Intentos: <%=intentos %><br>

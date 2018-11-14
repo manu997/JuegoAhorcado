@@ -92,9 +92,9 @@ public class AhorcadoServlet extends HttpServlet {
 		if(letra_cadena != "") {//Si se ha introducido algun caracter
 			letra = letra_cadena.charAt(0);
 			request.setAttribute("letra", letra);
+			letras_probadas += letra;
 			for(int i = 0; i < palabra_aleatoria.length(); i++) {
 		    	if(letra == palabra_aleatoria.charAt(i)) {
-	    			letras_probadas += letra;
 	    			char[] tempCharArray = palabra_oculta.toCharArray();//El String "palabra_oculta" se descompone en un array de char
 		    		tempCharArray[i] = letra; // "i" es la posicion que se va a sustituir por el valor de "letra"
 		    		palabra_oculta = String.valueOf(tempCharArray);//Se vuelve a juntar el array de char para formar un String
