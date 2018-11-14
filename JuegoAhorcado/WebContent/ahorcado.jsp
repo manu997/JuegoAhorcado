@@ -67,19 +67,35 @@
 		</tr>
 	</table>
 	<form action="AhorcadoServlet" method="post">
-		Introduce una letra: <input type="text" name="letra" size="1" maxLength="1"/> 
-		<input type="submit" value="Prueba letra"/><br>
-		<%=mensaje_letra %>
-		<font color='blue'><%=no_hay_letra %></font><br>
-		Ultima letra usada: <%=letra %><br>
-		Intentos: <%=intentos %><br>
-		Errores: <%=errores %><br>
-		Letras probadas: <%=letras_probadas %><br>
-		<a href="AhorcadoServlet?empezar">Cerrar ventana</a><br>
-		<%=mensaje_victoria %>
-		<%=mensaje_derrota%>
-		<br>
-		<%=reinicar %>
+		<%
+		if(!palabra_oculta.equals(palabra_aleatoria)) {
+			if(errores.equals("6")) {
+			%>
+				<%=mensaje_derrota%>
+				<br>
+				<%=reinicar %>
+			<%
+			} else {
+				%>
+				Introduce una letra: <input type="text" name="letra" size="1" maxLength="1"/> 
+				<input type="submit" value="Prueba letra"/><br>
+				<%=mensaje_letra %>
+				<font color='blue'><%=no_hay_letra %></font><br>
+				Ultima letra usada: <%=letra %><br>
+				Intentos: <%=intentos %><br>
+				Errores: <%=errores %><br>
+				Letras probadas: <%=letras_probadas %><br>
+				<a href="AhorcadoServlet?empezar">Cerrar ventana</a><br>
+			<%
+			}
+		} else {
+			%>
+			<%=mensaje_victoria%>
+			<br>
+			<%=reinicar %>
+		<%
+		}
+		%>
 		<input type="hidden" name="palabra_oculta" value="<%=palabra_oculta %>"/>
 		<input type="hidden" name="palabra_aleatoria" value="<%=palabra_aleatoria %>"/>
 		<input type="hidden" name="intentos" value="<%=intentos %>"/>
