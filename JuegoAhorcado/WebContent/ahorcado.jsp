@@ -56,56 +56,111 @@
 		heigth: 50px;
 		text-align: center;
 	}
+	div {
+		float: left;
+	}
+	#imagen {
+		padding-left: 2%;
+	}
 </style>
 </head>
 <body>
-	<table>
-		<tr>
+	<div>
+		<table>
+			<tr>
+				<%
+				for(int i = 0; i < palabra_oculta.length(); i++) {
+					%><td>
+					<%=palabra_oculta.charAt(i)%>
+					</td><%
+				}
+				%>
+			</tr>
+		</table>
+		<form action="AhorcadoServlet" method="post">
 			<%
-			for(int i = 0; i < palabra_oculta.length(); i++) {
-				%><td>
-				<%=palabra_oculta.charAt(i)%>
-				</td><%
-			}
-			%>
-		</tr>
-	</table>
-	<form action="AhorcadoServlet" method="post">
-		<%
-		if(!palabra_oculta.equals(palabra_aleatoria)) {
-			if(errores.equals("6")) {
-			%>
-				<%=mensaje_derrota%>
+			if(!palabra_oculta.equals(palabra_aleatoria)) {
+				if(errores.equals("6")) {
+				%>
+					<%=mensaje_derrota%>
+					<br>
+					<%=reinicar %>
+				<%
+				} else {
+					%>
+					Introduce una letra: <input type="text" name="letra" size="1" maxLength="1"/> 
+					<input type="submit" value="Prueba letra"/><br>
+					<%=mensaje_letra %>
+					<%=letra_repetida %>
+					<font color='blue'><%=no_hay_letra %></font><br>
+					Ultima letra usada: <%=letra %><br>
+					Intentos restantes: <%=intentos %><br>
+					Errores: <%=errores %><br>
+					Letras probadas: <%=letras_probadas %><br>
+					<a href="AhorcadoServlet?empezar">Cerrar ventana</a><br>
+				<%
+				}
+			} else {
+				%>
+				<%=mensaje_victoria%>
 				<br>
 				<%=reinicar %>
 			<%
-			} else {
-				%>
-				Introduce una letra: <input type="text" name="letra" size="1" maxLength="1"/> 
-				<input type="submit" value="Prueba letra"/><br>
-				<%=mensaje_letra %>
-				<%=letra_repetida %>
-				<font color='blue'><%=no_hay_letra %></font><br>
-				Ultima letra usada: <%=letra %><br>
-				Intentos: <%=intentos %><br>
-				Errores: <%=errores %><br>
-				Letras probadas: <%=letras_probadas %><br>
-				<a href="AhorcadoServlet?empezar">Cerrar ventana</a><br>
-			<%
 			}
-		} else {
 			%>
-			<%=mensaje_victoria%>
-			<br>
-			<%=reinicar %>
+			<input type="hidden" name="palabra_oculta" value="<%=palabra_oculta %>"/>
+			<input type="hidden" name="palabra_aleatoria" value="<%=palabra_aleatoria %>"/>
+			<input type="hidden" name="intentos" value="<%=intentos %>"/>
+			<input type="hidden" name="errores" value="<%=errores %>"/>
+			<input type="hidden" name="letras_probadas" value="<%=letras_probadas %>"/>
+		</form>
+	</div>
+	<div id="imagen">
 		<%
+		if(palabra_oculta.equals(palabra_aleatoria)) {
+			%>
+			<img height="260px" src="img/ahorcado_victoria.png">
+			<%
+		}else {
+			switch(errores) {
+			case "0":
+				%>
+				<img height="260px" src="img/ahorcado_vacio.png">
+				<%
+			break;
+			case "1":
+				%>
+				<img height="260px" src="img/ahorcado_cabeza.png">
+				<%
+			break;
+			case "2":
+				%>
+				<img height="260px" src="img/ahorcado_cuerpo.png">
+				<%
+			break;
+			case "3":
+				%>
+				<img height="260px" src="img/ahorcado_brazo_izquierdo.png">
+				<%
+			break;
+			case "4":
+				%>
+				<img height="260px" src="img/ahorcado_brazo_derecho.png">
+				<%
+			break;
+			case "5":
+				%>
+				<img height="260px" src="img/ahorcado_pierna_izquierda.png">
+				<%
+			break;
+			case "6":
+				%>
+				<img height="260px" src="img/ahorcado_derrota.png">
+				<%
+			break;
+			}
 		}
 		%>
-		<input type="hidden" name="palabra_oculta" value="<%=palabra_oculta %>"/>
-		<input type="hidden" name="palabra_aleatoria" value="<%=palabra_aleatoria %>"/>
-		<input type="hidden" name="intentos" value="<%=intentos %>"/>
-		<input type="hidden" name="errores" value="<%=errores %>"/>
-		<input type="hidden" name="letras_probadas" value="<%=letras_probadas %>"/>
-	</form>
+	</div>
 </body>
 </html>
